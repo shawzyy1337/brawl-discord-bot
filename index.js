@@ -1,7 +1,11 @@
 const { Client, Intents, Collection } = require("discord.js");
 const cliTable = require("cli-table3");
+const ticketHandler = require("./tickets/ticketHandler");
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
+
 const fs = require("fs");
 require("dotenv").config();
 client.commands = new Collection();
@@ -64,6 +68,43 @@ client.on("interactionCreate", async (interaction) => {
   } catch (error) {
     console.error(error);
     await interaction.reply("There was an error executing that command.");
+  }
+});
+
+client.on("guildMemberAdd", (member) => {
+  const channel = member.guild.channels.cache.find(
+    (channel) =>
+      channel.type === "GUILD_TEXT" &&
+      channel.name === process.env.welcomeChannelName
+  );
+
+  if (!channel) return;
+
+  channel.send(`Bem-vindo, ${member.user}!`);
+});
+
+client.on("messageCreate", async (message) => {
+  if (message.content === "!setupTickets") {
+    const { embed, components } = ticketHandler.createTicketEmbed();
+
+    message.reply({
+      embeds: [embed],
+      components: components,
+    });
+  }
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isSelectMenu()) return;
+
+  if (interaction.customId === "ticketMenu") {
+    const selectedDept = interaction.values[0];
+
+    /* TODO:
+        - Add the actual ticket logic
+    */
+
+    interaction.reply(`Você selecionou o departamento: ${selectedDept}`);
   }
 });
 
