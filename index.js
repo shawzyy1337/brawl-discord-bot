@@ -14,7 +14,10 @@ function delay(ms) {
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
+
+  if (command.data) {
+    client.commands.set(command.data.name, command);
+  }
 }
 
 client.on("ready", async () => {
@@ -24,31 +27,32 @@ client.on("ready", async () => {
   await delay(3000);
   console.log("Commands loaded!");
 
-  const commandFiles = fs
-    .readdirSync("./commands")
-    .filter((file) => file.endsWith(".js"));
-
   for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
+
+    if (command.data) {
+      client.commands.set(command.data.name, command);
+      await client.guilds.cache
+        .get(process.env.GUILD_ID)
+        ?.commands.create(command.data);
+    }
   }
 });
 
-client.on("messageCreate", (message) => {
-  if (!message.content.startsWith(PREFIX) || message.author.bot) return;
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
 
-  const args = message.content.slice(PREFIX.length).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
+  const { commandName, options } = interaction;
 
   if (!client.commands.has(commandName)) return;
 
   const command = client.commands.get(commandName);
 
   try {
-    command.execute(message, args);
+    await command.execute(interaction, options);
   } catch (error) {
     console.error(error);
-    message.reply("There was an error executing that command.");
+    await interaction.reply("There was an error executing that command.");
   }
 });
 
