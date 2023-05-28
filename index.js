@@ -1,6 +1,7 @@
 const { Client, Intents, Collection } = require("discord.js");
 const cliTable = require("cli-table3");
 const ticketHandler = require("./tickets/ticketHandler");
+const ticketInteraction = require("./tickets/ticketInteraction");
 
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -67,7 +68,7 @@ client.on("interactionCreate", async (interaction) => {
     await command.execute(interaction, options);
   } catch (error) {
     console.error(error);
-    await interaction.reply("There was an error executing that command.");
+    await interaction.reply("Houve um erro ao executar o comando.");
   }
 });
 
@@ -94,18 +95,6 @@ client.on("messageCreate", async (message) => {
   }
 });
 
-client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isSelectMenu()) return;
-
-  if (interaction.customId === "ticketMenu") {
-    const selectedDept = interaction.values[0];
-
-    /* TODO:
-        - Add the actual ticket logic
-    */
-
-    interaction.reply(`Você selecionou o departamento: ${selectedDept}`);
-  }
-});
+client.on("interactionCreate", ticketInteraction.handleTicketInteraction);
 
 client.login(process.env.DISCORD_TOKEN);

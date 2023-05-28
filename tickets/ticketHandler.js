@@ -20,7 +20,7 @@ function createTicketEmbed() {
       "Escolha um departamento:",
       "Selecione o departamento adequado no menu abaixo para abrir um ticket:"
     )
-    .setColor("#00ff00");
+    .setColor("#2f3136");
 
   const selectMenu = new MessageSelectMenu()
     .setCustomId("ticketMenu")
