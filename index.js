@@ -50,4 +50,21 @@ client.on("ready", async () => {
   console.log(`Total load time: ${totalTime}ms`);
 });
 
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const { commandName, options } = interaction;
+
+  if (!client.commands.has(commandName)) return;
+
+  const command = client.commands.get(commandName);
+
+  try {
+    await command.execute(interaction, options);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply("There was an error executing that command.");
+  }
+});
+
 client.login(process.env.DISCORD_TOKEN);
