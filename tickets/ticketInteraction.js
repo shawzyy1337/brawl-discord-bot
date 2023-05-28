@@ -1,4 +1,7 @@
 const { Permissions, MessageEmbed } = require("discord.js");
+const { createTicketEmbed } = require("./ticketHandler.js");
+
+const userDepartments = new Map();
 
 function handleTicketInteraction(interaction) {
   if (!interaction.isSelectMenu()) return;
@@ -28,6 +31,11 @@ function handleTicketInteraction(interaction) {
       return;
     }
 
+    if (userDepartments.has(member.id)) {
+      interaction.reply("Você já possui um ticket em aberto.");
+      return;
+    }
+
     const overwrites = [
       {
         id: guild.roles.everyone,
@@ -50,15 +58,27 @@ function handleTicketInteraction(interaction) {
         permissionOverwrites: overwrites,
       })
       .then((channel) => {
-        const embed = new MessageEmbed()
+        const ticketEmbed = new MessageEmbed()
           .setTitle("Suporte solicitado")
           .setDescription(welcomeMessage)
           .addField("Aberto por", member.user.tag)
           .addField("Quem poderá ajudar", `<@&${roleID}>`)
           .setColor("#00ff00");
 
-        channel.send({ embeds: [embed] });
-        interaction.reply(`Ticket aberto em ${channel}`);
+        channel.send({ embeds: [ticketEmbed] });
+
+        interaction.reply({
+          content: `Ticket aberto em ${channel}`,
+          ephemeral: true,
+        });
+
+        userDepartments.set(member.id, selectedDept);
+
+        const { embed: newEmbed, components } = createTicketEmbed();
+        interaction.message.edit({
+          embeds: [newEmbed],
+          components,
+        });
       })
       .catch((error) => {
         console.error("Error creating ticket:", error);

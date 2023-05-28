@@ -88,7 +88,7 @@ client.on("messageCreate", async (message) => {
   if (message.content === "!setupTickets") {
     const { embed, components } = ticketHandler.createTicketEmbed();
 
-    message.reply({
+    message.channel.send({
       embeds: [embed],
       components: components,
     });
