@@ -65,12 +65,21 @@ function handleTicketInteraction(interaction) {
           .addField("Quem poderá ajudar", `<@&${roleID}>`)
           .setColor("#00ff00");
 
-        channel.send({ embeds: [ticketEmbed] });
-
-        interaction.reply({
-          content: `Ticket aberto em ${channel}`,
-          ephemeral: true,
+          channel.send({ 
+            content: `<@${member.user.id}>, <@&${roleID}>`,
+            embeds: [ticketEmbed]
         });
+
+
+
+
+
+
+        const ticketabertoEmbed = new MessageEmbed()
+        .setTitle("🎟️ SISTEMA DE TICKETS 🎟️")
+        .setDescription(`${interaction.user}, o seu ticket foi criado em ${channel}. Confira o canal para prosseguirmos com o atendimento.`)
+        .setColor("#7CFC00")
+      interaction.reply({ embeds: [ticketabertoEmbed], ephemeral: true });
 
         userDepartments.set(member.id, selectedDept);
 
