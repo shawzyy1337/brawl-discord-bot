@@ -12,14 +12,10 @@ const ticketOptions = [
 
 function createTicketEmbed() {
   const embed = new MessageEmbed()
-    .setTitle("TICKETS")
+    .setTitle("🎟️ SISTEMA DE TICKETS 🎟️")
     .setDescription(
-      "Nossa equipe está sempre em atividade para tirar todas as suas dúvidas e atender seus chamados, para isso basta abrir um ticket, clicando no departamento que você quer.\n\n"
-    )
-    .addField(
-      "Escolha um departamento:",
-      "Selecione o departamento adequado no menu abaixo para abrir um ticket:"
-    )
+      "**»** Apresentamos o nosso sistema de tickets, uma plataforma segura e confidencial projetada para lidar com problemas sérios\n\n**»** Use este sistema com responsabilidade e apenas para problemas genuínos que exijam intervenção da equipe. O uso indevido do sistema pode resultar em ``punições ou perda de acesso ao sistema de tickets.``\n\n **Escolha um Departamento:** \n Selecione o departamento adequado no menu abaixo para abrir um ticket:")
+
     .setColor("#2f3136");
 
   const selectMenu = new MessageSelectMenu()
