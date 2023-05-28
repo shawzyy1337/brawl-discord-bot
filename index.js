@@ -76,7 +76,7 @@ client.on("guildMemberAdd", (member) => {
   const channel = member.guild.channels.cache.find(
     (channel) =>
       channel.type === "GUILD_TEXT" &&
-      channel.name === process.env.welcomeChannelName
+      channel.name === process.env.WELCOMECHANNELNAME
   );
 
   if (!channel) return;
