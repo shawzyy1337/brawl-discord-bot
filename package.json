@@ -1,0 +1,21 @@
+{
+  "name": "brawl-discord-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "discord.js": "13.2",
+    "dotenv": "^16.0.3",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
+}
