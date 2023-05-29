@@ -170,21 +170,22 @@ function handleTicketInteraction(interaction) {
           .then(function (urlTranscript) {
             const embedLog = new MessageEmbed()
               .setDescription(
-                `**INFORMAÇÕES DO TICKET**\n \
-            \`Criado por:\` <@!${member.id}>\n \
-            \`Deletado por:\` <@!${interaction.user.id}>\n \
-            \`ID:\` ${ticketChannel.id}\n \ \`Transcript:\` [Clique](${urlTranscript})\n)`
+                `**INFORMAÇÕES DO TICKET**\n` +
+                  ` \`Ticket fechado por:\` <@!${interaction.user.id}>\n` +
+                  ` \`Canal deletado:\` ${ticketChannel}\n` +
+                  ` \`ID:\` ${ticketChannel.id}\n` +
+                  ` \`Transcript:\` [Clique](${urlTranscript})\n`
               )
+
               .setColor("#2f3136")
               .setTimestamp();
 
             const embedDM = new MessageEmbed()
               .setDescription(
                 `Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n \
-             **INFORMAÇÕES DO TICKET**\n \
-             \`Criado por:\` <@!${member.id}>\n \
-             \`Deletado por:\` <@!${interaction.user.id}>\n \
-             \`ID:\` ${ticketChannel.id}\n \)`
+                **INFORMAÇÕES DO TICKET**\n \
+                \`Ticket fechado por:\` <@!${interaction.user.id}>\n \
+                \`ID:\` ${ticketChannel.id}\n \)`
               )
               .setColor("#2f3136")
               .setTimestamp();
@@ -192,7 +193,7 @@ function handleTicketInteraction(interaction) {
             const client = interaction.client;
 
             client.channels.cache
-              .get("1112186186178514946") // Need to be env
+              .get(process.env.LOGCHANNELID)
               .send({ embeds: [embedLog] });
 
             ticketChannel.send("Excluindo o canal...");
