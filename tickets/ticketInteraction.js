@@ -172,7 +172,7 @@ function handleTicketInteraction(interaction) {
               .setDescription(
                 `**INFORMAÇÕES DO TICKET**\n` +
                   ` \`Ticket fechado por:\` <@!${interaction.user.id}>\n` +
-                  ` \`Canal deletado:\` ${ticketChannel}\n` +
+                  ` \`Canal deletado:\` ${ticketChannel.name}\n` +
                   ` \`ID:\` ${ticketChannel.id}\n` +
                   ` \`Transcript:\` [Clique](${urlTranscript})\n`
               )
