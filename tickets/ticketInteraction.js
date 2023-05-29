@@ -43,18 +43,9 @@ function handleTicketInteraction(interaction) {
     }
 
     const overwrites = [
-      {
-        id: guild.roles.everyone,
-        deny: [Permissions.FLAGS.VIEW_CHANNEL],
-      },
-      {
-        id: roleID,
-        allow: [Permissions.FLAGS.VIEW_CHANNEL],
-      },
-      {
-        id: member.id,
-        allow: [Permissions.FLAGS.VIEW_CHANNEL],
-      },
+      { id: guild.roles.everyone, deny: [Permissions.FLAGS.VIEW_CHANNEL] },
+      { id: roleID, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
+      { id: member.id, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
     ];
 
     guild.channels
@@ -136,35 +127,35 @@ function handleTicketInteraction(interaction) {
       return;
     }
 
-    interaction.reply({
-      content: "Salvando as mensagens...",
-    });
+    interaction.reply({ content: "Salvando as mensagens..." });
 
     ticketChannel.messages
       .fetch()
       .then(async (messages) => {
-        let a = messages
+        let transcript = messages
           .filter((m) => !m.author.bot)
-          .map(
-            (m) =>
-              `${new Date(m.createdTimestamp).toLocaleString("pt-BR")} - ${
-                m.author.username
-              }#${m.author.discriminator}: ${
-                m.attachments.size > 0
-                  ? m.attachments.first().proxyURL
-                  : m.content
-              }`
-          )
+          .map((m) => {
+            const timestamp = new Date(m.createdTimestamp).toLocaleString(
+              "pt-BR"
+            );
+            const author = `${m.author.username}#${m.author.discriminator}`;
+            const content =
+              m.attachments.size > 0
+                ? m.attachments.first().proxyURL
+                : m.content;
+            return `${timestamp} - ${author}: ${content}`;
+          })
           .reverse()
           .join("\n");
-        if (a.length < 1) a = "Nada foi escrito neste ticket.";
+
+        if (transcript.length < 1) {
+          transcript = "Nada foi escrito neste ticket.";
+        }
+
         hastebin
           .createPaste(
-            a,
-            {
-              contentType: "text/plain",
-              server: "https://hastebin.skyra.pw",
-            },
+            transcript,
+            { contentType: "text/plain", server: "https://hastebin.skyra.pw" },
             {}
           )
           .then(function (urlTranscript) {
@@ -176,16 +167,15 @@ function handleTicketInteraction(interaction) {
                   ` \`ID:\` ${ticketChannel.id}\n` +
                   ` \`Transcript:\` [Clique](${urlTranscript})\n`
               )
-
               .setColor("#2f3136")
               .setTimestamp();
 
             const embedDM = new MessageEmbed()
               .setDescription(
-                `Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n \
-                **INFORMAÇÕES DO TICKET**\n \
-                \`Ticket fechado por:\` <@!${interaction.user.id}>\n \
-                \`ID:\` ${ticketChannel.id}\n \)`
+                `Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n` +
+                  `**INFORMAÇÕES DO TICKET**\n` +
+                  ` \`Ticket fechado por:\` <@!${interaction.user.id}>\n` +
+                  ` \`ID:\` ${ticketChannel.id}\n`
               )
               .setColor("#2f3136")
               .setTimestamp();
@@ -201,6 +191,7 @@ function handleTicketInteraction(interaction) {
             setTimeout(() => {
               ticketChannel.delete();
             }, 5000);
+
             userDepartments.delete(member.id);
           });
       })
