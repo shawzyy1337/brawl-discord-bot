@@ -4,6 +4,7 @@ const {
   MessageActionRow,
   MessageButton,
 } = require("discord.js");
+const hastebin = require("hastebin");
 const { createTicketEmbed } = require("./ticketHandler.js");
 
 const userDepartments = new Map();
@@ -135,16 +136,63 @@ function handleTicketInteraction(interaction) {
       return;
     }
 
-    ticketChannel
-      .delete()
-      .then(() => {
-        interaction.reply("Ticket fechado com sucesso.");
-        userDepartments.delete(member.id);
-      })
-      .catch((error) => {
-        console.error("Error closing ticket:", error);
-        interaction.reply("Houve um erro ao tentar fechar o ticket.");
-      });
+
+
+
+    interaction.reply({
+      content: 'Salvando as mensagens...',
+    });
+
+    ticketChannel.messages.fetch().then(async (messages) => {
+      let a = messages
+        .filter((m) => !m.author.bot)
+        .map((m) =>
+          `${new Date(m.createdTimestamp).toLocaleString('pt-BR')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
+        )
+        .reverse()
+        .join('\n');
+      if (a.length < 1) a = "Nada foi escrito neste ticket.";
+      hastebin
+        .createPaste(a, {
+          contentType: 'text/plain',
+          server: 'https://hastebin.skyra.pw',
+        }, {})
+        .then(function (urlTranscript) {
+
+          const embedLog = new MessageEmbed()
+            .setDescription(`**INFORMAÇÕES DO TICKET**\n \
+            \`Criado por:\` <@!${member.id}>\n \
+            \`Deletado por:\` <@!${interaction.user.id}>\n \
+            \`ID:\` ${ticketChannel.id}\n \ \`Transcript:\` [Clique](${urlTranscript})\n)`)
+            .setColor("#2f3136")
+            .setTimestamp();
+
+          const embedDM = new MessageEmbed()
+            .setDescription(`Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n \
+             **INFORMAÇÕES DO TICKET**\n \
+             \`Criado por:\` <@!${member.id}>\n \
+             \`Deletado por:\` <@!${interaction.user.id}>\n \
+             \`ID:\` ${ticketChannel.id}\n \)`)
+            .setColor("#2f3136")
+            .setTimestamp();
+
+          const client = interaction.client; 
+
+          client.channels.cache
+            .get("1112186186178514946") // Need to Fix
+            .send({ embeds: [embedLog] });
+
+          
+
+            
+
+          ticketChannel.send('Excluindo o canal...');
+
+          setTimeout(() => {
+            ticketChannel.delete();
+          }, 5000);
+        });
+    });
   }
 }
 
