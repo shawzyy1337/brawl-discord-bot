@@ -190,7 +190,7 @@ function handleTicketInteraction(interaction) {
           const client = interaction.client;
 
           client.channels.cache
-            .get("1112186186178514946") // Need to Fix
+            .get(process.env.LOGCHANNELID) // env 
             .send({ embeds: [embedLog] });
 
           ticketChannel.send("Excluindo o canal...");
