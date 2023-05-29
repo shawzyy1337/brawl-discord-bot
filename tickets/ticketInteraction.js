@@ -128,7 +128,10 @@ function handleTicketInteraction(interaction) {
     }
 
     if (!ticketChannel.permissionsFor(member).has("MANAGE_CHANNELS")) {
-      interaction.reply("Você não tem permissão para fechar este ticket.");
+      interaction.reply({
+        content: "Você não tem permissão para fechar este ticket.",
+        ephemeral: true,
+      });
       return;
     }
 
