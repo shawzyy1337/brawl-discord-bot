@@ -140,47 +140,6 @@ function handleTicketInteraction(interaction) {
       content: "Salvando as mensagens...",
     });
 
-<<<<<<< HEAD
-    ticketChannel.messages.fetch().then(async (messages) => {
-      let a = messages
-        .filter((m) => !m.author.bot)
-        .map(
-          (m) =>
-            `${new Date(m.createdTimestamp).toLocaleString("pt-BR")} - ${
-              m.author.username
-            }#${m.author.discriminator}: ${
-              m.attachments.size > 0
-                ? m.attachments.first().proxyURL
-                : m.content
-            }`
-        )
-        .reverse()
-        .join("\n");
-      if (a.length < 1) a = "Nada foi escrito neste ticket.";
-      hastebin
-        .createPaste(
-          a,
-          {
-            contentType: "text/plain",
-            server: "https://hastebin.skyra.pw",
-          },
-          {}
-        )
-        .then(function (urlTranscript) {
-          const embedLog = new MessageEmbed()
-            .setDescription(
-              `**INFORMAÇÕES DO TICKET**\n \
-            \`Criado por:\` <@!${member.id}>\n \
-            \`Deletado por:\` <@!${interaction.user.id}>\n \
-            \`ID:\` ${ticketChannel.id}\n \ \`Transcript:\` [Clique](${urlTranscript})\n)`
-            )
-            .setColor("#2f3136")
-            .setTimestamp();
-
-          const embedDM = new MessageEmbed()
-            .setDescription(
-              `Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n \
-=======
     ticketChannel.messages
       .fetch()
       .then(async (messages) => {
@@ -222,39 +181,20 @@ function handleTicketInteraction(interaction) {
             const embedDM = new MessageEmbed()
               .setDescription(
                 `Ficamos felizes em poder atendê-lo, esperamos que você tenha sido bem atendido.\n\n \
->>>>>>> 4ac551f (Added some debug)
              **INFORMAÇÕES DO TICKET**\n \
              \`Criado por:\` <@!${member.id}>\n \
              \`Deletado por:\` <@!${interaction.user.id}>\n \
              \`ID:\` ${ticketChannel.id}\n \)`
-<<<<<<< HEAD
-            )
-            .setColor("#2f3136")
-            .setTimestamp();
-
-          const client = interaction.client;
-=======
               )
               .setColor("#2f3136")
               .setTimestamp();
 
             const client = interaction.client;
->>>>>>> 4ac551f (Added some debug)
 
             client.channels.cache
               .get("1112186186178514946") // Need to Fix
               .send({ embeds: [embedLog] });
 
-<<<<<<< HEAD
-          ticketChannel.send("Excluindo o canal...");
-
-          setTimeout(() => {
-            ticketChannel.delete();
-          }, 5000);
-          userDepartments.delete(member.id);
-        });
-    });
-=======
             ticketChannel.send("Excluindo o canal...");
 
             setTimeout(() => {
@@ -266,7 +206,6 @@ function handleTicketInteraction(interaction) {
       .catch((error) => {
         console.error("Erro ao buscar as mensagens do ticket:", error);
       });
->>>>>>> 4ac551f (Added some debug)
   }
 }
 
