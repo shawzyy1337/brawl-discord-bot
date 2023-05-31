@@ -23,7 +23,8 @@ async function updateBotStatus() {
     );
 
     const playersOnline = response.data.players.online;
-    client.user.setActivity(`${playersOnline} jogadores online`, {
+    const playersText = playersOnline === 1 ? "jogador" : "jogadores";
+    client.user.setActivity(`${playersOnline} ${playersText} online`, {
       type: "WATCHING",
     });
   } catch (error) {
