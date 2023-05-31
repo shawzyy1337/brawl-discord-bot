@@ -196,7 +196,7 @@ function handleTicketInteraction(interaction) {
           });
       })
       .catch((error) => {
-        console.error("Erro ao buscar as mensagens do ticket:", error);
+        console.error("Error while fetching ticket messages:", error);
       });
   }
 }

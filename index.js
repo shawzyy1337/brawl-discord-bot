@@ -8,6 +8,7 @@ const client = new Client({
 });
 
 const fs = require("fs");
+const axios = require("axios");
 require("dotenv").config();
 client.commands = new Collection();
 
@@ -15,21 +16,33 @@ const commandFiles = fs
   .readdirSync("./commands")
   .filter((file) => file.endsWith(".js"));
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+async function updateBotStatus() {
+  try {
+    const response = await axios.get(
+      "https://api.mcsrvstat.us/2/redebrawl.com"
+    );
+
+    const playersOnline = response.data.players.online;
+    client.user.setActivity(`${playersOnline} jogadores online`, {
+      type: "WATCHING",
+    });
+  } catch (error) {
+    console.error("Error while fetching API data:", error);
+  }
 }
 
 client.on("ready", async () => {
   console.log("Bot is ready!");
 
   console.log("Loading commands...");
-  await delay(3000);
-  console.log("Commands loaded!");
 
   const commandsTable = new cliTable({
     head: ["Command Name", "Load Time"],
     colWidths: [30, 15],
   });
+
+  updateBotStatus();
+  setInterval(updateBotStatus, 60000);
 
   const startTime = Date.now();
 

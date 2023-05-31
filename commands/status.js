@@ -36,7 +36,7 @@ module.exports = {
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
-      console.error("Erro ao obter os dados da API:", error);
+      console.error("Error while fetching API data:", error);
       await interaction.reply("Ocorreu um erro ao obter os dados do servidor.");
     }
   },
