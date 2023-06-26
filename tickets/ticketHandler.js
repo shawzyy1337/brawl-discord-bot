@@ -5,9 +5,10 @@ const {
 } = require("discord.js");
 
 const ticketOptions = [
-  { label: "Departamento 1", value: "dept1" },
-  { label: "Departamento 2", value: "dept2" },
-  { label: "Departamento 3", value: "dept3" },
+  { label: "❓  Dúvidas", value: "duvidas" },
+  { label: "🛒 Compras", value: "compras" },
+  { label: "📜 Revisar Banimento", value: "revisao" },
+  { label: "⚠️ Reportar um Bug", value: "bug" },
 ];
 
 function createTicketEmbed() {

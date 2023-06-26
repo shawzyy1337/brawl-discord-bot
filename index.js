@@ -86,18 +86,6 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-client.on("guildMemberAdd", (member) => {
-  const channel = member.guild.channels.cache.find(
-    (channel) =>
-      channel.type === "GUILD_TEXT" &&
-      channel.name === process.env.WELCOMECHANNELNAME
-  );
-
-  if (!channel) return;
-
-  channel.send(`Bem-vindo, ${member.user}!`);
-});
-
 client.on("messageCreate", async (message) => {
   if (message.content === "!setupTickets") {
     const { embed, components } = ticketHandler.createTicketEmbed();

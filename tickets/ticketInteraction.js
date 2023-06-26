@@ -45,8 +45,8 @@ function handleTicketInteraction(interaction) {
     const overwrites = [
       { id: guild.roles.everyone, deny: [Permissions.FLAGS.VIEW_CHANNEL] },
       { id: roleID, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
-      { id: member.id, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
-    ];
+      { id: member.id, allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.SEND_MESSAGES] },
+    ];    
 
     guild.channels
       .create(`${selectedDept}-${member.user.username}`, {
@@ -183,7 +183,7 @@ function handleTicketInteraction(interaction) {
             const client = interaction.client;
 
             client.channels.cache
-              .get(process.env.LOGCHANNELID)
+              .get(process.env.LOG_CHANNEL_ID)
               .send({ embeds: [embedLog] });
 
             ticketChannel.send("Excluindo o canal...");
